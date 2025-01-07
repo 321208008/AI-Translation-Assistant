@@ -24,49 +24,43 @@ async function retryWithDelay<T>(
 
 export async function extractPDFWithKimi(file: File): Promise<string> {
   try {
-    if (!file || !file.type.includes('pdf')) {
-      throw new Error('请提供有效的PDF文件')
-    }
-
-    // 将文件转换为base64
-    const pdfContent = await new Promise<string>((resolve) => {
+    // 将文件转换为 base64
+    const base64String = await new Promise<string>((resolve, reject) => {
       const reader = new FileReader()
-      reader.onload = () => {
-        const base64Data = reader.result as string
-        // 确保只获取base64数据部分
-        const base64 = base64Data.split(',')[1] || base64Data
-        resolve(base64)
+      reader.onloadend = () => {
+        const base64 = reader.result as string
+        const base64Data = base64.split(',')[1]
+        resolve(base64Data)
       }
+      reader.onerror = reject
       reader.readAsDataURL(file)
     })
 
-    return await retryWithDelay(async () => {
-      const response = await fetch('/api/file/extract', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          file: pdfContent,
-          filename: file.name,
-          service: 'kimi'
-        }),
-      })
-
-      if (!response.ok) {
-        const error = await response.json()
-        throw new Error(error.error || 'PDF处理失败')
-      }
-
-      const data = await response.json()
-      if (!data.text) {
-        throw new Error('无法解析返回结果')
-      }
-
-      return data.text
+    const response = await fetch('/api/file/extract', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        file: base64String,
+        filename: file.name,
+        service: 'kimi'
+      }),
     })
+
+    if (!response.ok) {
+      const error = await response.json()
+      throw new Error(error.message || '文件处理失败')
+    }
+
+    const data = await response.json()
+    if (!data.text) {
+      throw new Error('文件内容获取失败')
+    }
+
+    return data.text
   } catch (error: any) {
-    console.error('PDF处理错误:', error)
-    throw new Error(error.message || 'PDF处理失败')
+    console.error('文件处理错误:', error)
+    throw error
   }
 } 

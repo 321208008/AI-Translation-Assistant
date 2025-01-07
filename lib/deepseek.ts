@@ -78,19 +78,12 @@ export async function translateWithDeepSeek(text: string, targetLang: string) {
 
 export async function extractTextWithDeepseek(file: File): Promise<string> {
   try {
-    // 检查文件大小（限制为10MB）
-    if (file.size > 10 * 1024 * 1024) {
-      throw new Error('文件大小不能超过10MB')
-    }
-
-    // 创建FormData对象
     const formData = new FormData()
     formData.append('file', file)
 
-    // 调用本地API路由
     const response = await fetch('/api/file/extract', {
       method: 'POST',
-      body: formData
+      body: formData,
     })
 
     if (!response.ok) {
