@@ -1,77 +1,61 @@
 "use client"
 
+interface IWindow extends Window {
+  webkitSpeechRecognition: any;
+}
+
 export class SpeechRecognitionService {
-  private recognition: SpeechRecognition | null = null;
+  private recognition: any = null;
   private isListening: boolean = false;
 
   constructor() {
     if (typeof window !== 'undefined') {
-      const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+      const windowWithWebkit = window as IWindow;
+      const SpeechRecognition = windowWithWebkit.SpeechRecognition || windowWithWebkit.webkitSpeechRecognition;
       if (SpeechRecognition) {
         this.recognition = new SpeechRecognition();
-        this.setupRecognition();
+        this.recognition.continuous = true;
+        this.recognition.interimResults = true;
       }
     }
   }
 
-  private setupRecognition() {
-    if (!this.recognition) return;
-
-    this.recognition.continuous = true;
-    this.recognition.interimResults = true;
-    this.recognition.maxAlternatives = 1;
-  }
-
-  startListening(
-    onResult: (text: string, isFinal: boolean) => void,
-    onError: (error: string) => void,
-    language: string = 'zh-CN'
-  ) {
+  public start(onResult: (text: string, isFinal: boolean) => void, onError: (error: string) => void) {
     if (!this.recognition) {
-      onError('语音识别在当前浏览器不可用');
+      onError('Speech recognition is not supported in this browser');
       return;
     }
 
     if (this.isListening) {
-      this.stopListening();
+      return;
     }
+
+    this.isListening = true;
+
+    this.recognition.onresult = (event: any) => {
+      const result = event.results[event.results.length - 1];
+      const text = result[0].transcript;
+      const isFinal = result.isFinal;
+      onResult(text, isFinal);
+    };
+
+    this.recognition.onerror = (event: any) => {
+      onError(event.error);
+      this.isListening = false;
+    };
 
     try {
-      this.recognition.lang = language;
-
-      this.recognition.onresult = (event) => {
-        const result = event.results[event.results.length - 1];
-        const text = result[0].transcript;
-        onResult(text, result.isFinal);
-      };
-
-      this.recognition.onerror = (event) => {
-        onError(`语音识别错误: ${event.error}`);
-        this.stopListening();
-      };
-
-      this.recognition.onend = () => {
-        if (this.isListening) {
-          this.recognition?.start();
-        }
-      };
-
       this.recognition.start();
-      this.isListening = true;
     } catch (error) {
-      onError(`启动语音识别失败: ${error}`);
-    }
-  }
-
-  stopListening() {
-    if (this.recognition && this.isListening) {
-      this.recognition.stop();
+      onError('Error starting speech recognition');
       this.isListening = false;
     }
   }
 
-  isSupported(): boolean {
-    return typeof window !== 'undefined' && 
-           !!(window.SpeechRecognition || window.webkitSpeechRecognition);
+  public stop() {
+    if (this.recognition && this.isListening) {
+      this.recognition.stop();
+      this.isListening = false;
+    }
   }
 } 
