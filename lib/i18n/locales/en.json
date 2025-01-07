@@ -1,0 +1,83 @@
+{
+  "tabs": {
+    "image": "Image Recognition",
+    "speech": "Speech Recognition",
+    "text": "Text Translation",
+    "video": "Video Recognition",
+    "file": "File Recognition",
+    "pdf": "PDF Recognition"
+  },
+  "uploadImage": "Upload Image",
+  "uploadAudio": "Upload Audio",
+  "uploadVideo": "Upload Video",
+  "uploadPDF": "Upload PDF",
+  "dropHere": "Drop to upload",
+  "dragAndDrop": "or drag and drop image here",
+  "extractText": "Extract Text",
+  "selectLanguage": "Select Target Language",
+  "translate": "Translate",
+  "improve": "Improve",
+  "improveTooltip": "Use AI to improve translation",
+  "extractedText": "Extracted Text",
+  "translatedText": "Translation Result",
+  "noTextExtracted": "No text extracted yet",
+  "noTranslation": "No translation yet",
+  "startListening": "Start Speech Recognition",
+  "stopListening": "Stop Speech Recognition",
+  "error": {
+    "invalidFile": "Invalid File",
+    "invalidFileDesc": "Please upload an image file",
+    "invalidVideoFile": "Invalid Video File",
+    "invalidVideoFileDesc": "Please upload a video file",
+    "noImage": "No Image Selected",
+    "noImageDesc": "Please upload an image first",
+    "noText": "No Text Input",
+    "noTextDesc": "Please enter text to translate",
+    "noLanguage": "No Language Selected",
+    "noLanguageDesc": "Please select a target language",
+    "noTranslation": "No Translation",
+    "noTranslationDesc": "Please translate first",
+    "extracting": "Text Extraction Failed",
+    "extractingDesc": "Please try again later",
+    "translating": "Translation Failed",
+    "translatingDesc": "An error occurred during translation, please try again",
+    "improving": "Improvement Failed",
+    "improvingDesc": "An error occurred during improvement, please try again",
+    "speechNotSupported": "Speech Recognition Not Available",
+    "speechNotSupportedDesc": "Your browser does not support speech recognition",
+    "speechRecognition": "Speech Recognition Error",
+    "videoProcessing": "Video Processing Failed",
+    "videoProcessingDesc": "An error occurred during video processing, please try again",
+    "videoRecognition": "Video Recognition Error",
+    "onlyPDF": "Only PDF files are supported"
+  },
+  "success": {
+    "extracted": "Text Extracted Successfully",
+    "translated": "Translation Successful",
+    "improved": "Improvement Successful",
+    "speechRecognized": "Speech Recognition Successful",
+    "videoExtracted": "Video Text Extracted Successfully",
+    "description": "Operation completed"
+  },
+  "selectService": "Select Translation Service",
+  "selectOcrService": "Select OCR Service",
+  "processing": "Processing...",
+  "appName": "AI Translation Assistant",
+  "switchLanguage": "Switch Language",
+  "toggleTheme": "Toggle Theme",
+  "theme": {
+    "light": "Light",
+    "dark": "Dark",
+    "system": "System"
+  },
+  "languages": {
+    "english": "English",
+    "chinese": "中文"
+  },
+  "selectAsrService": "Select Speech Recognition Service",
+  "asrServices": {
+    "tencent": "Tencent Cloud"
+  },
+  "enterText": "Enter text to translate",
+  "chooseFile": "Choose File"
+} 
