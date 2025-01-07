@@ -1,7 +1,7 @@
 "use client"
 
 import { useState, useCallback, useEffect, useRef } from 'react'
-import { Upload, Image as ImageIcon, Languages, Wand2, Mic, MicOff, Video, Loader2, FileText, FileType } from 'lucide-react'
+import { Upload, Image as ImageIcon, Languages, Wand2, Mic, MicOff, Video, Loader2, FileText, FileType, X } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import { Card, CardHeader, CardTitle, CardContent } from '@/components/ui/card'
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
@@ -118,39 +118,41 @@ export default function Home() {
         case 'zhipu':
           text = await extractTextWithZhipu(image)
           break
-        case 'deepseek':
+        case 'tencent':
           const base64Data = image.split(',')[1]
-          const byteCharacters = atob(base64Data)
-          const byteArrays = []
-          for (let offset = 0; offset < byteCharacters.length; offset += 512) {
-            const slice = byteCharacters.slice(offset, offset + 512)
-            const byteNumbers = new Array(slice.length)
-            for (let i = 0; i < slice.length; i++) {
-              byteNumbers[i] = slice.charCodeAt(i)
-            }
-            const byteArray = new Uint8Array(byteNumbers)
-            byteArrays.push(byteArray)
+          const response = await fetch('/api/ocr', {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({ image: base64Data }),
+          })
+
+          if (!response.ok) {
+            const error = await response.json()
+            throw new Error(error.message || '文字识别失败')
           }
-          const blob = new Blob(byteArrays, { type: 'image/png' })
-          const imageFile = new File([blob], 'image.png', { type: 'image/png' })
-          text = await extractTextWithDeepseek(imageFile)
+
+          const data = await response.json()
+          text = data.text
           break
         default:
           const defaultBase64Data = image.split(',')[1]
-          const defaultByteCharacters = atob(defaultBase64Data)
-          const defaultByteArrays = []
-          for (let offset = 0; offset < defaultByteCharacters.length; offset += 512) {
-            const slice = defaultByteCharacters.slice(offset, offset + 512)
-            const byteNumbers = new Array(slice.length)
-            for (let i = 0; i < slice.length; i++) {
-              byteNumbers[i] = slice.charCodeAt(i)
-            }
-            const byteArray = new Uint8Array(byteNumbers)
-            defaultByteArrays.push(byteArray)
+          const defaultResponse = await fetch('/api/ocr', {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({ image: defaultBase64Data }),
+          })
+
+          if (!defaultResponse.ok) {
+            const error = await defaultResponse.json()
+            throw new Error(error.message || '文字识别失败')
           }
-          const defaultBlob = new Blob(defaultByteArrays, { type: 'image/png' })
-          const defaultImageFile = new File([defaultBlob], 'image.png', { type: 'image/png' })
-          text = await extractTextWithDeepseek(defaultImageFile)
+
+          const defaultData = await defaultResponse.json()
+          text = defaultData.text
       }
       setExtractedText(text)
       toast({
@@ -169,7 +171,7 @@ export default function Home() {
   }
 
   const handleTranslate = async () => {
-    if (!sourceText || !selectedLanguage) {
+    if (!extractedText || !selectedLanguage) {
       toast({
         title: t('error.translating'),
         description: t('error.noLanguage'),
@@ -183,19 +185,19 @@ export default function Home() {
       let result: string
       switch (translationService) {
         case 'deepseek':
-          result = await translateWithDeepSeek(sourceText, selectedLanguage)
+          result = await translateWithDeepSeek(extractedText, selectedLanguage)
           break
         case 'qwen':
-          result = await translateWithQwen(sourceText, selectedLanguage)
+          result = await translateWithQwen(extractedText, selectedLanguage)
           break
         case 'gemini':
-          result = await translateText(sourceText, selectedLanguage)
+          result = await translateText(extractedText, selectedLanguage)
           break
         case 'zhipu':
-          result = await translateWithZhipu(sourceText, selectedLanguage)
+          result = await translateWithZhipu(extractedText, selectedLanguage)
           break
         default:
-          result = await translateWithDeepSeek(sourceText, selectedLanguage)
+          result = await translateWithDeepSeek(extractedText, selectedLanguage)
       }
       setTranslatedText(result)
       toast({
@@ -595,34 +597,30 @@ export default function Home() {
                   <div className="relative w-full h-full">
                     <img
                       src={image}
-                      alt="上传的图片"
+                      alt="Uploaded"
                       className="w-full h-full object-contain"
                     />
                     <Button
-                      variant="destructive"
+                      variant="ghost"
                       size="icon"
                       className="absolute top-2 right-2"
                       onClick={() => setImage(null)}
                     >
-                      <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                        <line x1="18" y1="6" x2="6" y2="18"></line>
-                        <line x1="6" y1="6" x2="18" y2="18"></line>
-                      </svg>
+                      <X className="h-4 w-4" />
                     </Button>
                   </div>
                 ) : (
                   <div className="flex flex-col items-center justify-center text-center p-4">
-                    <Upload className="w-8 h-8 mb-4 text-muted-foreground" />
+                    <Upload className="h-8 w-8 mb-4 text-muted-foreground" />
                     <p className="text-sm text-muted-foreground mb-2">{t('dragAndDrop')}</p>
                     <div className="relative">
-                      <Button variant="secondary" size="sm" disabled={isProcessing}>
-                        {t('chooseFile')}
+                      <Button variant="secondary" size="sm">
+                        {t('selectImage')}
                         <input
                           type="file"
                           accept="image/*"
                           onChange={handleImageUpload}
                           className="absolute inset-0 w-full h-full opacity-0 cursor-pointer"
-                          disabled={isProcessing}
                         />
                       </Button>
                     </div>
@@ -630,95 +628,106 @@ export default function Home() {
                 )}
               </Card>
 
-              <div className="flex flex-col sm:flex-row justify-center items-center gap-3 sm:gap-4">
-                <Select onValueChange={setOcrService} defaultValue="tencent">
-                  <SelectTrigger className="w-full sm:w-40">
-                    <SelectValue placeholder={t('selectOcrService')} />
-                  </SelectTrigger>
-                  <SelectContent>
-                    <SelectItem value="tencent">腾讯云</SelectItem>
-                    <SelectItem value="gemini">Gemini</SelectItem>
-                    <SelectItem value="zhipu">智谱GLM4V</SelectItem>
-                  </SelectContent>
-                </Select>
+              <div className="flex flex-col gap-4">
+                <div className="flex flex-col sm:flex-row justify-center items-center gap-3 sm:gap-4">
+                  <Select onValueChange={setOcrService} defaultValue="tencent">
+                    <SelectTrigger className="w-full sm:w-40">
+                      <SelectValue placeholder={t('selectOCRService')} />
+                    </SelectTrigger>
+                    <SelectContent>
+                      <SelectItem value="tencent">腾讯云</SelectItem>
+                      <SelectItem value="gemini">Gemini</SelectItem>
+                      <SelectItem value="zhipu">智谱GLM4</SelectItem>
+                    </SelectContent>
+                  </Select>
 
-                <Button
-                  onClick={handleExtractText}
-                  disabled={!image || isProcessing}
-                  className="w-full sm:w-40"
-                >
-                  <Upload className="mr-2 h-4 w-4" />
-                  {isProcessing ? t('extracting') : t('extract')}
-                </Button>
-              </div>
+                  <Button
+                    onClick={handleExtractText}
+                    disabled={!image || isProcessing}
+                    className="w-full sm:w-40"
+                  >
+                    {isProcessing ? (
+                      <div className="flex items-center">
+                        <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                        <span>{t('extracting')}</span>
+                      </div>
+                    ) : (
+                      <div className="flex items-center">
+                        <FileText className="mr-2 h-4 w-4" />
+                        <span>{t('extract')}</span>
+                      </div>
+                    )}
+                  </Button>
+                </div>
 
-              <div className="flex flex-col sm:flex-row justify-center items-center gap-3 sm:gap-4">
-                <Select onValueChange={setSelectedLanguage}>
-                  <SelectTrigger className="w-full sm:w-40">
-                    <SelectValue placeholder={t('selectLanguage')} />
-                  </SelectTrigger>
-                  <SelectContent>
-                    {getLanguageCategories().map(category => (
-                      <SelectGroup key={category}>
-                        <SelectLabel>{category}</SelectLabel>
-                        {getLanguagesByCategory(category).map(language => (
-                          <SelectItem key={language.code} value={language.name}>
-                            {language.nativeName} ({language.name})
-                          </SelectItem>
-                        ))}
-                      </SelectGroup>
-                    ))}
-                  </SelectContent>
-                </Select>
+                <div className="flex flex-col sm:flex-row justify-center items-center gap-3 sm:gap-4">
+                  <Select onValueChange={setSelectedLanguage}>
+                    <SelectTrigger className="w-full sm:w-40">
+                      <SelectValue placeholder={t('selectLanguage')} />
+                    </SelectTrigger>
+                    <SelectContent>
+                      {getLanguageCategories().map(category => (
+                        <SelectGroup key={category}>
+                          <SelectLabel>{category}</SelectLabel>
+                          {getLanguagesByCategory(category).map(language => (
+                            <SelectItem key={language.code} value={language.name}>
+                              {language.nativeName} ({language.name})
+                            </SelectItem>
+                          ))}
+                        </SelectGroup>
+                      ))}
+                    </SelectContent>
+                  </Select>
 
-                <Select onValueChange={setTranslationService} defaultValue="deepseek">
-                  <SelectTrigger className="w-full sm:w-40">
-                    <SelectValue placeholder={t('selectService')} />
-                  </SelectTrigger>
-                  <SelectContent>
-                    <SelectItem value="deepseek">DeepSeek</SelectItem>
-                    <SelectItem value="qwen">通义千问</SelectItem>
-                    <SelectItem value="gemini">Gemini</SelectItem>
-                    <SelectItem value="zhipu">智谱GLM4</SelectItem>
-                  </SelectContent>
-                </Select>
+                  <Select onValueChange={setTranslationService} defaultValue="deepseek">
+                    <SelectTrigger className="w-full sm:w-40">
+                      <SelectValue placeholder={t('selectService')} />
+                    </SelectTrigger>
+                    <SelectContent>
+                      <SelectItem value="deepseek">DeepSeek</SelectItem>
+                      <SelectItem value="qwen">通义千问</SelectItem>
+                      <SelectItem value="gemini">Gemini</SelectItem>
+                      <SelectItem value="zhipu">智谱GLM4</SelectItem>
+                    </SelectContent>
+                  </Select>
 
-                <Button
-                  onClick={handleTranslate}
-                  disabled={!sourceText || !selectedLanguage || isProcessing}
-                  className="w-full sm:w-40"
-                >
-                  {isProcessing ? (
-                    <div className="flex items-center">
-                      <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-                      <span>{t('translating')}</span>
-                    </div>
-                  ) : (
-                    <div className="flex items-center">
-                      <Languages className="mr-2 h-4 w-4" />
-                      <span>{t('translate')}</span>
-                    </div>
-                  )}
-                </Button>
+                  <Button
+                    onClick={handleTranslate}
+                    disabled={!extractedText || !selectedLanguage || isProcessing}
+                    className="w-full sm:w-40"
+                  >
+                    {isProcessing ? (
+                      <div className="flex items-center">
+                        <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                        <span>{t('translating')}</span>
+                      </div>
+                    ) : (
+                      <div className="flex items-center">
+                        <Languages className="mr-2 h-4 w-4" />
+                        <span>{t('translate')}</span>
+                      </div>
+                    )}
+                  </Button>
 
-                <TooltipProvider>
-                  <Tooltip>
-                    <TooltipTrigger asChild>
-                      <Button
-                        onClick={handleImprove}
-                        disabled={!translatedText || isProcessing}
-                        variant="outline"
-                        className="w-full sm:w-40"
-                      >
-                        <Wand2 className="mr-2 h-4 w-4" />
-                        {t('improve')}
-                      </Button>
-                    </TooltipTrigger>
-                    <TooltipContent>
-                      <p>{t('improveTooltip')}</p>
-                    </TooltipContent>
-                  </Tooltip>
-                </TooltipProvider>
+                  <TooltipProvider>
+                    <Tooltip>
+                      <TooltipTrigger asChild>
+                        <Button
+                          onClick={handleImprove}
+                          disabled={!translatedText || isProcessing}
+                          variant="outline"
+                          className="w-full sm:w-40"
+                        >
+                          <Wand2 className="mr-2 h-4 w-4" />
+                          {t('improve')}
+                        </Button>
+                      </TooltipTrigger>
+                      <TooltipContent>
+                        <p>{t('improveTooltip')}</p>
+                      </TooltipContent>
+                    </Tooltip>
+                  </TooltipProvider>
+                </div>
               </div>
 
               {extractedText && (

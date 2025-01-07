@@ -73,6 +73,7 @@
     "tailwindcss-animate": "^1.0.7",
     "tencentcloud-sdk-nodejs": "^4.0.1005",
     "tencentcloud-sdk-nodejs-hunyuan": "^4.0.1007",
+    "tencentcloud-sdk-nodejs-ocr": "^4.0.1007",
     "typescript": "5.2.2",
     "uuid": "^8.3.2",
     "vaul": "^0.9.9",
