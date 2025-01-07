@@ -3,27 +3,48 @@ import { NextResponse } from 'next/server'
 const KIMI_API_KEY = process.env.NEXT_PUBLIC_KIMI_API_KEY
 const KIMI_API_URL = 'https://api.moonshot.cn/v1'
 
+// 设置较短的超时时间
+const TIMEOUT = 25000 // 25 seconds
+
+// 带超时的 fetch
+async function fetchWithTimeout(url: string, options: RequestInit, timeout = TIMEOUT) {
+  const controller = new AbortController()
+  const id = setTimeout(() => controller.abort(), timeout)
+
+  try {
+    const response = await fetch(url, {
+      ...options,
+      signal: controller.signal
+    })
+    clearTimeout(id)
+    return response
+  } catch (error) {
+    clearTimeout(id)
+    throw error
+  }
+}
+
 export async function POST(request: Request) {
   try {
     const { file, filename, service } = await request.json()
 
     if (!file) {
       return NextResponse.json(
-        { success: false, message: '未提供文件' },
+        { error: '未提供文件' },
         { status: 400 }
       )
     }
 
     if (service !== 'kimi') {
       return NextResponse.json(
-        { success: false, message: '不支持的服务' },
+        { error: '不支持的服务' },
         { status: 400 }
       )
     }
 
     if (!KIMI_API_KEY) {
       return NextResponse.json(
-        { success: false, message: '未配置API密钥' },
+        { error: '未配置API密钥' },
         { status: 500 }
       )
     }
@@ -35,7 +56,7 @@ export async function POST(request: Request) {
     formData.append('file', pdfFile)
     formData.append('purpose', 'file-extract')
 
-    const uploadResponse = await fetch(`${KIMI_API_URL}/files`, {
+    const uploadResponse = await fetchWithTimeout(`${KIMI_API_URL}/files`, {
       method: 'POST',
       headers: {
         'Authorization': `Bearer ${KIMI_API_KEY}`
@@ -44,7 +65,7 @@ export async function POST(request: Request) {
     })
 
     if (!uploadResponse.ok) {
-      const error = await uploadResponse.json()
+      const error = await uploadResponse.json().catch(() => ({ error: { message: '文件上传失败' } }))
       console.error('KIMI文件上传错误:', error)
       throw new Error(error.error?.message || '文件上传失败')
     }
@@ -52,14 +73,14 @@ export async function POST(request: Request) {
     const fileObject = await uploadResponse.json()
 
     // 第二步：获取文件内容
-    const contentResponse = await fetch(`${KIMI_API_URL}/files/${fileObject.id}/content`, {
+    const contentResponse = await fetchWithTimeout(`${KIMI_API_URL}/files/${fileObject.id}/content`, {
       headers: {
         'Authorization': `Bearer ${KIMI_API_KEY}`
       }
     })
 
     if (!contentResponse.ok) {
-      const error = await contentResponse.json()
+      const error = await contentResponse.json().catch(() => ({ error: { message: '文件内容获取失败' } }))
       console.error('KIMI文件内容获取错误:', error)
       throw new Error(error.error?.message || '文件内容获取失败')
     }
@@ -82,7 +103,7 @@ export async function POST(request: Request) {
       }
     ]
 
-    const chatResponse = await fetch(`${KIMI_API_URL}/chat/completions`, {
+    const chatResponse = await fetchWithTimeout(`${KIMI_API_URL}/chat/completions`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
@@ -96,7 +117,7 @@ export async function POST(request: Request) {
     })
 
     if (!chatResponse.ok) {
-      const error = await chatResponse.json()
+      const error = await chatResponse.json().catch(() => ({ error: { message: 'API请求失败' } }))
       console.error('KIMI API错误:', error)
       throw new Error(error.error?.message || 'API请求失败')
     }
@@ -113,9 +134,16 @@ export async function POST(request: Request) {
     })
   } catch (error: any) {
     console.error('PDF处理错误:', error)
+    // 处理 AbortError
+    if (error.name === 'AbortError') {
+      return NextResponse.json(
+        { error: '请求超时，请尝试上传更小的文件' },
+        { status: 504 }
+      )
+    }
     return NextResponse.json(
       { error: error.message || 'PDF处理失败' },
-      { status: 500 }
+      { status: error.status || 500 }
     )
   }
 } 
