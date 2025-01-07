@@ -119,10 +119,38 @@ export default function Home() {
           text = await extractTextWithZhipu(image)
           break
         case 'deepseek':
-          text = await extractTextWithDeepseek(image.split(',')[1])
+          const base64Data = image.split(',')[1]
+          const byteCharacters = atob(base64Data)
+          const byteArrays = []
+          for (let offset = 0; offset < byteCharacters.length; offset += 512) {
+            const slice = byteCharacters.slice(offset, offset + 512)
+            const byteNumbers = new Array(slice.length)
+            for (let i = 0; i < slice.length; i++) {
+              byteNumbers[i] = slice.charCodeAt(i)
+            }
+            const byteArray = new Uint8Array(byteNumbers)
+            byteArrays.push(byteArray)
+          }
+          const blob = new Blob(byteArrays, { type: 'image/png' })
+          const imageFile = new File([blob], 'image.png', { type: 'image/png' })
+          text = await extractTextWithDeepseek(imageFile)
           break
         default:
-          text = await extractTextWithDeepseek(image.split(',')[1])
+          const defaultBase64Data = image.split(',')[1]
+          const defaultByteCharacters = atob(defaultBase64Data)
+          const defaultByteArrays = []
+          for (let offset = 0; offset < defaultByteCharacters.length; offset += 512) {
+            const slice = defaultByteCharacters.slice(offset, offset + 512)
+            const byteNumbers = new Array(slice.length)
+            for (let i = 0; i < slice.length; i++) {
+              byteNumbers[i] = slice.charCodeAt(i)
+            }
+            const byteArray = new Uint8Array(byteNumbers)
+            defaultByteArrays.push(byteArray)
+          }
+          const defaultBlob = new Blob(defaultByteArrays, { type: 'image/png' })
+          const defaultImageFile = new File([defaultBlob], 'image.png', { type: 'image/png' })
+          text = await extractTextWithDeepseek(defaultImageFile)
       }
       setExtractedText(text)
       toast({
