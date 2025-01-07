@@ -9,22 +9,22 @@ import {
 import { useI18n } from "@/lib/i18n/use-translations"
 
 export function LanguageToggle() {
-  const { t, locale, setLanguage } = useI18n()
+  const { t, setLanguage } = useI18n()
 
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
-        <Button variant="ghost" size="icon">
-          <Languages className="h-[1.2rem] w-[1.2rem]" />
-          <span className="sr-only">{t('switchLanguage')}</span>
+        <Button variant="ghost" size="sm">
+          <Languages className="h-4 w-4" />
+          <span className="sr-only">Toggle language</span>
         </Button>
       </DropdownMenuTrigger>
       <DropdownMenuContent align="end">
-        <DropdownMenuItem onClick={() => setLanguage("en")}>
-          {t('languages.english')}
+        <DropdownMenuItem onClick={() => setLanguage('zh')}>
+          中文
         </DropdownMenuItem>
-        <DropdownMenuItem onClick={() => setLanguage("zh")}>
-          {t('languages.chinese')}
+        <DropdownMenuItem onClick={() => setLanguage('en')}>
+          English
         </DropdownMenuItem>
       </DropdownMenuContent>
     </DropdownMenu>
