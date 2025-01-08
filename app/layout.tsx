@@ -5,6 +5,8 @@ import { ThemeProvider } from '@/components/theme-provider';
 import { LanguageProvider } from '@/components/language-provider';
 import { Toaster } from '@/components/ui/toaster';
 import Script from 'next/script';
+import { Header } from '@/components/header';
+import { Footer } from '@/components/footer';
 
 const inter = Inter({ subsets: ['latin'] });
 
@@ -44,7 +46,13 @@ export default function RootLayout({
           disableTransitionOnChange
         >
           <LanguageProvider>
-            {children}
+            <div className="min-h-screen flex flex-col">
+              <Header />
+              <main className="container mx-auto px-4 py-8 flex-1">
+                {children}
+              </main>
+              <Footer />
+            </div>
             <Toaster />
           </LanguageProvider>
         </ThemeProvider>
