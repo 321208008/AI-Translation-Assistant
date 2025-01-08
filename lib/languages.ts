@@ -58,28 +58,23 @@ export const languages: Language[] = [
   { code: 'ar', name: 'Arabic', nativeName: 'العربية', category: 'Middle Eastern' },
   { code: 'fa', name: 'Persian', nativeName: 'فارسی', category: 'Middle Eastern' },
   { code: 'tr', name: 'Turkish', nativeName: 'Türkçe', category: 'Middle Eastern' },
-  { code: 'he', name: 'Hebrew', nativeName: 'עברית', category: 'Middle Eastern' },
-  { code: 'ku', name: 'Kurdish', nativeName: 'کوردی', category: 'Middle Eastern' },
-  
-  // African Languages
-  { code: 'sw', name: 'Swahili', nativeName: 'Kiswahili', category: 'African' },
-  { code: 'am', name: 'Amharic', nativeName: 'አማርኛ', category: 'African' },
-  { code: 'ha', name: 'Hausa', nativeName: 'هَوُسَ', category: 'African' },
-  { code: 'yo', name: 'Yoruba', nativeName: 'Yorùbá', category: 'African' },
-  { code: 'zu', name: 'Zulu', nativeName: 'isiZulu', category: 'African' },
-  
-  // Latin American Languages
-  { code: 'pt-BR', name: 'Brazilian Portuguese', nativeName: 'Português do Brasil', category: 'Latin American' },
-  { code: 'es-419', name: 'Latin American Spanish', nativeName: 'Español de América Latina', category: 'Latin American' },
-  { code: 'qu', name: 'Quechua', nativeName: 'Runasimi', category: 'Latin American' },
-  { code: 'ay', name: 'Aymara', nativeName: 'Aymar aru', category: 'Latin American' },
-  { code: 'gn', name: 'Guarani', nativeName: "Avañe'ẽ", category: 'Latin American' },
+  { code: 'he', name: 'Hebrew', nativeName: 'עברית', category: 'Middle Eastern' }
 ];
 
-export const getLanguageCategories = () => {
-  return Array.from(new Set(languages.map(lang => lang.category))).sort();
+export const getLanguageCategories = (): string[] => {
+  const categories = new Set(languages.map(lang => lang.category));
+  return Array.from(categories);
 };
 
-export const getLanguagesByCategory = (category: string) => {
+export const getLanguagesByCategory = (category: string): Language[] => {
   return languages.filter(lang => lang.category === category);
+};
+
+export const getLanguageByCode = (code: string): Language | undefined => {
+  return languages.find(lang => lang.code === code);
+};
+
+export const getLanguageNameByCode = (code: string): string => {
+  const language = getLanguageByCode(code);
+  return language ? language.name : code;
 };

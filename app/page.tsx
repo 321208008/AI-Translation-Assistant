@@ -33,7 +33,7 @@ export default function Home() {
   const [image, setImage] = useState<string | null>(null)
   const [extractedText, setExtractedText] = useState('')
   const [translatedText, setTranslatedText] = useState('')
-  const [selectedLanguage, setSelectedLanguage] = useState('')
+  const [selectedLanguage, setSelectedLanguage] = useState<string>('')
   const [isProcessing, setIsProcessing] = useState(false)
   const [isDragging, setIsDragging] = useState(false)
   const [isListening, setIsListening] = useState(false)
@@ -53,6 +53,10 @@ export default function Home() {
   useEffect(() => {
     asrServiceRef.current = new TencentASRService();
   }, [asrService]);
+
+  useEffect(() => {
+    console.log('Current selected language:', selectedLanguage)
+  }, [selectedLanguage])
 
   const handleDragOver = useCallback((e: React.DragEvent) => {
     e.preventDefault()
@@ -370,41 +374,36 @@ export default function Home() {
 
     setIsProcessing(true)
     try {
-      const response = await fetch('/api/translate', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          text: sourceText,
-          targetLanguage: selectedLanguage,
-          service: translationService
-        }),
-      });
-
-      if (!response.ok) {
-        const error = await response.json();
-        throw new Error(error.message || '翻译失败');
+      let result: string
+      switch (translationService) {
+        case 'deepseek':
+          result = await translateWithDeepSeek(sourceText, selectedLanguage)
+          break
+        case 'qwen':
+          result = await translateWithQwen(sourceText, selectedLanguage)
+          break
+        case 'gemini':
+          result = await translateText(sourceText, selectedLanguage)
+          break
+        case 'zhipu':
+          result = await translateWithZhipu(sourceText, selectedLanguage)
+          break
+        default:
+          result = await translateWithDeepSeek(sourceText, selectedLanguage)
       }
-
-      const data = await response.json();
-      if (!data.success) {
-        throw new Error(data.message || '翻译失败');
-      }
-
-      setTranslatedText(data.result);
+      setTranslatedText(result)
       toast({
         title: t('success.translated'),
         description: t('success.description')
-      });
+      })
     } catch (error: any) {
       toast({
         title: t('error.translating'),
         description: error.message || t('error.translatingDesc'),
         variant: "destructive"
-      });
+      })
     } finally {
-      setIsProcessing(false);
+      setIsProcessing(false)
     }
   }
 
@@ -506,7 +505,12 @@ export default function Home() {
               />
 
               <div className="flex flex-col sm:flex-row justify-center items-center gap-3 sm:gap-4">
-                <Select onValueChange={setSelectedLanguage}>
+                <Select 
+                  onValueChange={(value) => {
+                    console.log('Selected language:', value)
+                    setSelectedLanguage(value)
+                  }}
+                >
                   <SelectTrigger className="w-full sm:w-40">
                     <SelectValue placeholder={t('selectLanguage')} />
                   </SelectTrigger>
@@ -515,7 +519,7 @@ export default function Home() {
                       <SelectGroup key={category}>
                         <SelectLabel>{category}</SelectLabel>
                         {getLanguagesByCategory(category).map(language => (
-                          <SelectItem key={language.code} value={language.name}>
+                          <SelectItem key={language.code} value={language.code}>
                             {language.nativeName} ({language.name})
                           </SelectItem>
                         ))}
@@ -537,7 +541,7 @@ export default function Home() {
                 </Select>
 
                 <Button
-                  onClick={handleTranslate}
+                  onClick={handleTextTranslate}
                   disabled={!sourceText || !selectedLanguage || isProcessing}
                   className="w-full sm:w-40"
                 >
