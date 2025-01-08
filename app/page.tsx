@@ -17,7 +17,6 @@ import {
   TooltipProvider,
   TooltipTrigger,
 } from "@/components/ui/tooltip"
-import { AdSense } from '@/components/adsense'
 import { translateWithDeepSeek } from '@/lib/deepseek'
 import { translateWithQwen } from '@/lib/qwen'
 import { extractTextWithGemini } from '@/lib/gemini'
