@@ -29,6 +29,7 @@
   - 翻译结果优化
   - 深色/浅色主题切换
   - 响应式设计，支持移动端
+  - Google AdSense 自动广告集成
 
 ## 安装步骤
 
@@ -57,14 +58,20 @@ cp .env.example .env.local
 - DEEPSEEK_API_KEY（DeepSeek API）
 - QWEN_API_KEY（通义千问 API）
 
-4. 启动开发服务器
+4. 配置 Google AdSense
+   - 登录 [Google AdSense](https://www.google.com/adsense)
+   - 获取你的 AdSense ID（格式如：ca-pub-xxxxxxxxxxxxxxxx）
+   - 在 `app/layout.tsx` 中找到 AdSense 组件并替换为你的 ID
+   - AdSense 会自动在合适的位置展示广告，无需手动创建广告位
+
+5. 启动开发服务器
 ```bash
 npm run dev
 # 或者使用 yarn
 yarn dev
 ```
 
-5. 构建生产版本
+6. 构建生产版本
 ```bash
 npm run build
 # 或者使用 yarn
@@ -112,6 +119,7 @@ yarn build
 - Radix UI
 - Zustand
 - 多个 AI API 集成
+- Google AdSense
 
 ## 注意事项
 
@@ -120,6 +128,8 @@ yarn build
 - PDF 翻译支持文本 PDF，不支持扫描版 PDF
 - 语音识别目前支持主流语言
 - 视频内容提取可能需要较长时间，取决于视频长度和复杂度
+- AdSense 广告可能需要一段时间才会显示，这取决于 Google 的审核流程
+- 确保你的网站符合 [AdSense 合规政策](https://support.google.com/adsense/answer/48182)
 
 ## 许可证
 
