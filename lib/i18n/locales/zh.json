@@ -26,6 +26,7 @@
   "noTranslation": "尚未翻译",
   "startListening": "开始语音识别",
   "stopListening": "停止语音识别",
+  "selectImage": "选择图片",
   "error": {
     "invalidFile": "无效的文件",
     "invalidFileDesc": "请上传图片文件",
