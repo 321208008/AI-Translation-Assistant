@@ -202,7 +202,7 @@ export async function analyzeVideoContent(frames: string[]): Promise<string> {
 
     // 去除重复内容
     const lines = result.split('\n')
-    const uniqueLines = Array.from(new Set(lines.filter(line => line.trim())))
+    const uniqueLines = Array.from(new Set(lines.filter((line: string) => line.trim())))
     const cleanedText = uniqueLines.join('\n')
     
     return cleanedText
