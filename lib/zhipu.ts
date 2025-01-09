@@ -135,22 +135,22 @@ export async function translateWithZhipu(text: string, targetLanguage: string): 
 
 export async function extractVideoFrames(videoFile: File): Promise<string[]> {
   return new Promise((resolve, reject) => {
-    const reader = new FileReader()
+    const reader = new FileReader();
     reader.onloadend = () => {
-      const base64Data = reader.result as string
-      resolve([base64Data])
-    }
+      const base64Data = (reader.result as string).split(',')[1];
+      resolve([base64Data]);
+    };
     reader.onerror = () => {
-      reject(new Error('视频处理失败'))
-    }
-    reader.readAsDataURL(videoFile)
-  })
+      reject(new Error('视频处理失败'));
+    };
+    reader.readAsDataURL(videoFile);
+  });
 }
 
 export async function analyzeVideoContent(frames: string[]): Promise<string> {
   try {
     const token = await getZhipuToken()
-    const videoBase64 = frames[0].replace(/^data:.*?;base64,/, '')
+    const videoBase64 = frames[0]
 
     const response = await fetch(API_URL, {
       method: 'POST',
@@ -199,8 +199,13 @@ export async function analyzeVideoContent(frames: string[]): Promise<string> {
     if (!result) {
       throw new Error('未识别到文字内容')
     }
+
+    // 去除重复内容
+    const lines = result.split('\n')
+    const uniqueLines = Array.from(new Set(lines.filter(line => line.trim())))
+    const cleanedText = uniqueLines.join('\n')
     
-    return result
+    return cleanedText
   } catch (error: any) {
     console.error('智谱AI视频分析错误:', error)
     throw new Error(error.message || '视频分析失败')

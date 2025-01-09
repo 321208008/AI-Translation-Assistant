@@ -422,18 +422,22 @@ export default function Home() {
     setVideoFile(file);
     setIsProcessing(true);
     try {
-      // 提取视频帧
+      console.log('开始提取视频帧...');
       const frames = await extractVideoFrames(file);
+      console.log('视频帧提取完成，帧数:', frames.length);
+      console.log('第一帧数据示例:', frames[0].substring(0, 100) + '...');
       
-      // 使用智谱AI分析视频内容
-      const text = await analyzeVideoContent(frames);
+      let text: string;
+      text = await analyzeVideoContent(frames);
       
+      console.log('视频处理完成，提取的文本长度:', text.length);
       setExtractedText(text);
       toast({
         title: t('success.videoExtracted'),
         description: t('success.description')
       });
     } catch (error: any) {
+      console.error('视频处理完整错误:', error);
       toast({
         title: t('error.videoProcessing'),
         description: error.message || t('error.videoProcessingDesc'),
@@ -1078,7 +1082,7 @@ export default function Home() {
                       <SelectGroup key={category}>
                         <SelectLabel>{category}</SelectLabel>
                         {getLanguagesByCategory(category).map(language => (
-                          <SelectItem key={language.code} value={language.name}>
+                          <SelectItem key={language.code} value={language.code}>
                             {language.nativeName} ({language.name})
                           </SelectItem>
                         ))}

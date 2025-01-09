@@ -92,5 +92,10 @@
   "fileRecognition": "文件识别",
   "uploadPDF": "上传PDF文件",
   "dragAndDropPDF": "拖放 PDF 文件到这里",
-  "selectPDF": "选择 PDF 文件"
+  "selectPDF": "选择 PDF 文件",
+  "selectVideoService": "选择视频识别服务",
+  "videoServices": {
+    "zhipu": "智谱GLM4",
+    "qwen-max": "通义千问XL-Max"
+  }
 } 
