@@ -17,10 +17,10 @@ import {
   TooltipProvider,
   TooltipTrigger,
 } from "@/components/ui/tooltip"
-import { translateWithDeepSeek } from '@/lib/deepseek'
-import { translateWithQwen, extractTextWithQwen } from '@/lib/qwen'
+import { translateWithDeepSeek, translateWithQwen, translateWithZhipu, translateWithHunyuan } from '@/lib/server/translate'
+import { extractTextWithQwen } from '@/lib/qwen'
 import { extractTextWithGemini } from '@/lib/gemini'
-import { extractVideoFrames, analyzeVideoContent, extractTextWithZhipu, extractFileContent, translateWithZhipu } from '@/lib/zhipu'
+import { extractVideoFrames, analyzeVideoContent, extractTextWithZhipu, extractFileContent } from '@/lib/zhipu'
 import { cn } from '@/lib/utils'
 import { Textarea } from '@/components/ui/textarea'
 import { extractTextWithDeepseek } from '@/lib/deepseek'
@@ -201,6 +201,9 @@ export default function Home() {
           break
         case 'zhipu':
           result = await translateWithZhipu(extractedText, selectedLanguage)
+          break
+        case 'hunyuan':
+          result = await translateWithHunyuan(extractedText, selectedLanguage)
           break
         default:
           result = await translateWithDeepSeek(extractedText, selectedLanguage)
@@ -390,6 +393,9 @@ export default function Home() {
         case 'zhipu':
           result = await translateWithZhipu(sourceText, selectedLanguage)
           break
+        case 'hunyuan':
+          result = await translateWithHunyuan(sourceText, selectedLanguage)
+          break
         default:
           result = await translateWithDeepSeek(sourceText, selectedLanguage)
       }
@@ -543,6 +549,7 @@ export default function Home() {
                     <SelectItem value="qwen">通义千问</SelectItem>
                     <SelectItem value="gemini">Gemini</SelectItem>
                     <SelectItem value="zhipu">智谱GLM4</SelectItem>
+                    <SelectItem value="hunyuan">腾讯混元</SelectItem>
                   </SelectContent>
                 </Select>
 
@@ -699,6 +706,7 @@ export default function Home() {
                       <SelectItem value="qwen">通义千问</SelectItem>
                       <SelectItem value="gemini">Gemini</SelectItem>
                       <SelectItem value="zhipu">智谱GLM4</SelectItem>
+                      <SelectItem value="hunyuan">腾讯混元</SelectItem>
                     </SelectContent>
                   </Select>
 
@@ -822,6 +830,7 @@ export default function Home() {
                     <SelectItem value="qwen">通义千问</SelectItem>
                     <SelectItem value="gemini">Gemini</SelectItem>
                     <SelectItem value="zhipu">智谱GLM4</SelectItem>
+                    <SelectItem value="hunyuan">腾讯混元</SelectItem>
                   </SelectContent>
                 </Select>
 
@@ -843,6 +852,9 @@ export default function Home() {
                             break
                           case 'zhipu':
                             result = await translateWithZhipu(fileContent, selectedLanguage)
+                            break
+                          case 'hunyuan':
+                            result = await translateWithHunyuan(fileContent, selectedLanguage)
                             break
                           default:
                             result = await translateWithDeepSeek(fileContent, selectedLanguage)
@@ -975,6 +987,7 @@ export default function Home() {
                     <SelectItem value="qwen">通义千问</SelectItem>
                     <SelectItem value="gemini">Gemini</SelectItem>
                     <SelectItem value="zhipu">智谱GLM4</SelectItem>
+                    <SelectItem value="hunyuan">腾讯混元</SelectItem>
                   </SelectContent>
                 </Select>
 
@@ -1104,6 +1117,7 @@ export default function Home() {
                     <SelectItem value="qwen">通义千问</SelectItem>
                     <SelectItem value="gemini">Gemini</SelectItem>
                     <SelectItem value="zhipu">智谱GLM4</SelectItem>
+                    <SelectItem value="hunyuan">腾讯混元</SelectItem>
                   </SelectContent>
                 </Select>
 
