@@ -17,7 +17,7 @@ import {
   TooltipProvider,
   TooltipTrigger,
 } from "@/components/ui/tooltip"
-import { translateWithDeepSeek, translateWithQwen, translateWithZhipu, translateWithHunyuan } from '@/lib/server/translate'
+import { translateWithDeepSeek, translateWithQwen, translateWithZhipu, translateWithHunyuan, translateWith4oMini } from '@/lib/server/translate'
 import { extractTextWithQwen } from '@/lib/qwen'
 import { extractTextWithGemini } from '@/lib/gemini'
 import { extractVideoFrames, analyzeVideoContent, extractTextWithZhipu, extractFileContent } from '@/lib/zhipu'
@@ -204,6 +204,9 @@ export default function Home() {
           break
         case 'hunyuan':
           result = await translateWithHunyuan(extractedText, selectedLanguage)
+          break
+        case '4o-mini':
+          result = await translateWith4oMini(extractedText, selectedLanguage)
           break
         default:
           result = await translateWithDeepSeek(extractedText, selectedLanguage)
@@ -550,6 +553,7 @@ export default function Home() {
                     <SelectItem value="gemini">Gemini</SelectItem>
                     <SelectItem value="zhipu">智谱GLM4</SelectItem>
                     <SelectItem value="hunyuan">腾讯混元</SelectItem>
+                    <SelectItem value="4o-mini">OpenAI</SelectItem>
                   </SelectContent>
                 </Select>
 
@@ -707,6 +711,7 @@ export default function Home() {
                       <SelectItem value="gemini">Gemini</SelectItem>
                       <SelectItem value="zhipu">智谱GLM4</SelectItem>
                       <SelectItem value="hunyuan">腾讯混元</SelectItem>
+                      <SelectItem value="4o-mini">OpenAI</SelectItem>
                     </SelectContent>
                   </Select>
 
@@ -831,6 +836,7 @@ export default function Home() {
                     <SelectItem value="gemini">Gemini</SelectItem>
                     <SelectItem value="zhipu">智谱GLM4</SelectItem>
                     <SelectItem value="hunyuan">腾讯混元</SelectItem>
+                    <SelectItem value="4o-mini">OpenAI</SelectItem>
                   </SelectContent>
                 </Select>
 
@@ -855,6 +861,9 @@ export default function Home() {
                             break
                           case 'hunyuan':
                             result = await translateWithHunyuan(fileContent, selectedLanguage)
+                            break
+                          case '4o-mini':
+                            result = await translateWith4oMini(fileContent, selectedLanguage)
                             break
                           default:
                             result = await translateWithDeepSeek(fileContent, selectedLanguage)
@@ -988,6 +997,7 @@ export default function Home() {
                     <SelectItem value="gemini">Gemini</SelectItem>
                     <SelectItem value="zhipu">智谱GLM4</SelectItem>
                     <SelectItem value="hunyuan">腾讯混元</SelectItem>
+                    <SelectItem value="4o-mini">OpenAI</SelectItem>
                   </SelectContent>
                 </Select>
 
@@ -1118,6 +1128,7 @@ export default function Home() {
                     <SelectItem value="gemini">Gemini</SelectItem>
                     <SelectItem value="zhipu">智谱GLM4</SelectItem>
                     <SelectItem value="hunyuan">腾讯混元</SelectItem>
+                    <SelectItem value="4o-mini">OpenAI</SelectItem>
                   </SelectContent>
                 </Select>
 

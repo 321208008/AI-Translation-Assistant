@@ -1,137 +1,90 @@
-# AI 翻译助手
+# AI Translate
 
-一个功能强大的多语言翻译工具，支持文本、图片、PDF、语音和视频内容的翻译。
+一个强大的多模型 AI 翻译工具，支持多种主流 AI 模型的文本翻译功能。
 
 ## 功能特点
 
-- 🌍 支持多种语言翻译
-  - 东亚语言（中文、日语、韩语等）
-  - 欧洲语言（英语、法语、德语等）
-  - 南亚语言（印地语、孟加拉语等）
-  - 东南亚语言（泰语、越南语等）
-  - 中东语言（阿拉伯语、波斯语等）
-
-- 🤖 多种 AI 翻译引擎
+- 支持多种 AI 模型翻译服务：
   - DeepSeek
-  - 通义千问
-  - Gemini
-  - 智谱 GLM4
-  - 腾讯混元
+  - Qwen (通义千问)
+  - Zhipu (智谱)
+  - OpenAI GPT-4
+  - Tencent Hunyuan (腾讯混元)
+- 支持多语言互译
+- 简洁直观的用户界面
+- 实时翻译响应
 
-- 📝 多种内容格式支持
-  - 文本翻译
-  - 图片 OCR 识别并翻译
-  - PDF 文档翻译
-  - 语音识别并翻译
-  - 视频内容提取并翻译
+## 环境要求
 
-- ✨ 其他特性
-  - 实时语音识别
-  - 翻译结果优化
-  - 深色/浅色主题切换
-  - 响应式设计，支持移动端
-  - Google AdSense 自动广告集成
+- Node.js 16.x 或更高版本
+- npm 或 yarn 包管理器
 
 ## 安装步骤
 
-1. 克隆项目
+1. 克隆项目到本地：
 ```bash
-git clone https://github.com/yourusername/ai-translate.git
+git clone [项目地址]
 cd ai-translate
 ```
 
-2. 安装依赖
+2. 安装依赖：
 ```bash
 npm install
-# 或者使用 yarn
+# 或
 yarn install
 ```
 
-3. 配置环境变量
-```bash
-cp .env.example .env.local
+3. 配置环境变量：
+   - 复制 `.env.example` 文件并重命名为 `.env.local`
+   - 填入所需的 API 密钥：
+
+```env
+# Tencent Cloud API
+TENCENT_SECRET_ID=your_secret_id
+TENCENT_SECRET_KEY=your_secret_key
+NEXT_PUBLIC_TENCENT_API_KEY=your_tencent_api_key
+
+# AI Model API Keys
+NEXT_PUBLIC_GEMINI_API_KEY=your_gemini_api_key
+NEXT_PUBLIC_ZHIPU_API_KEY=your_zhipu_api_key
+NEXT_PUBLIC_DEEPSEEK_API_KEY=your_deepseek_api_key
+NEXT_PUBLIC_QWEN_API_KEY=your_qwen_api_key
+NEXT_PUBLIC_OPENAI_API_KEY=your_openai_api_key
 ```
-编辑 `.env.local` 文件，填入必要的 API 密钥：
-- TENCENT_SECRET_ID（腾讯云 API）
-- TENCENT_SECRET_KEY（腾讯云 API）
-- GEMINI_API_KEY（Google Gemini API）
-- ZHIPU_API_KEY（智谱 API）
-- DEEPSEEK_API_KEY（DeepSeek API）
-- QWEN_API_KEY（通义千问 API）
 
-4. 配置 Google AdSense
-   - 登录 [Google AdSense](https://www.google.com/adsense)
-   - 获取你的 AdSense ID（格式如：ca-pub-xxxxxxxxxxxxxxxx）
-   - 在 `app/layout.tsx` 中找到 AdSense 组件并替换为你的 ID
-   - AdSense 会自动在合适的位置展示广告，无需手动创建广告位
-
-5. 启动开发服务器
+4. 启动开发服务器：
 ```bash
 npm run dev
-# 或者使用 yarn
+# 或
 yarn dev
-```
-
-6. 构建生产版本
-```bash
-npm run build
-# 或者使用 yarn
-yarn build
 ```
 
 ## 使用说明
 
-1. 文本翻译
-   - 在文本框中输入或粘贴要翻译的文本
-   - 选择目标语言
-   - 选择翻译服务
-   - 点击翻译按钮
+1. 访问应用主页
+2. 在输入框中输入需要翻译的文本
+3. 选择目标语言
+4. 选择想要使用的 AI 模型服务
+5. 点击翻译按钮获取翻译结果
 
-2. 图片翻译
-   - 上传图片或拖拽图片到指定区域
-   - 选择 OCR 服务提取文字
-   - 选择目标语言和翻译服务
-   - 点击翻译按钮
+## API 密钥获取方式
 
-3. PDF 翻译
-   - 上传 PDF 文件
-   - 等待文本提取完成
-   - 选择目标语言和翻译服务
-   - 点击翻译按钮
-
-4. 语音翻译
-   - 点击麦克风按钮开始录音
-   - 或上传音频文件
-   - 等待语音识别完成
-   - 选择目标语言和翻译服务
-   - 点击翻译按钮
-
-5. 视频翻译
-   - 上传视频文件
-   - 等待视频内容提取完成
-   - 选择目标语言和翻译服务
-   - 点击翻译按钮
-
-## 技术栈
-
-- Next.js 13
-- TypeScript
-- Tailwind CSS
-- Radix UI
-- Zustand
-- 多个 AI API 集成
-- Google AdSense
+- DeepSeek API：访问 [DeepSeek 官网](https://platform.deepseek.com/) 注册并获取
+- Qwen API：访问 [通义千问官网](https://dashscope.aliyun.com/) 注册并获取
+- Zhipu API：访问 [智谱 AI 官网](https://open.bigmodel.cn/) 注册并获取
+- OpenAI API：访问 [OpenAI 官网](https://platform.openai.com/) 注册并获取
+- Tencent Hunyuan API：访问 [腾讯云官网](https://cloud.tencent.com/) 注册并获取
 
 ## 注意事项
 
-- 确保所有必要的 API 密钥都已正确配置
-- 图片 OCR 支持常见的图片格式（PNG, JPG, JPEG）
-- PDF 翻译支持文本 PDF，不支持扫描版 PDF
-- 语音识别目前支持主流语言
-- 视频内容提取可能需要较长时间，取决于视频长度和复杂度
-- AdSense 广告可能需要一段时间才会显示，这取决于 Google 的审核流程
-- 确保你的网站符合 [AdSense 合规政策](https://support.google.com/adsense/answer/48182)
+- 请确保所有必要的 API 密钥都已正确配置
+- 不同 AI 模型可能有不同的响应时间和翻译风格
+- 建议在正式使用前先测试各个模型的翻译效果
 
-## 许可证
+## 广告集成
+
+本项目已集成 Google AdSense，可通过配置相应的广告代码来展示广告内容。
+
+## 开源协议
 
 MIT License 
