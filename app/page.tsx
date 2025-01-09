@@ -18,7 +18,7 @@ import {
   TooltipTrigger,
 } from "@/components/ui/tooltip"
 import { translateWithDeepSeek } from '@/lib/deepseek'
-import { translateWithQwen } from '@/lib/qwen'
+import { translateWithQwen, extractTextWithQwen } from '@/lib/qwen'
 import { extractTextWithGemini } from '@/lib/gemini'
 import { extractVideoFrames, analyzeVideoContent, extractTextWithZhipu, extractFileContent, translateWithZhipu } from '@/lib/zhipu'
 import { cn } from '@/lib/utils'
@@ -120,6 +120,9 @@ export default function Home() {
           break
         case 'zhipu':
           text = await extractTextWithZhipu(image)
+          break
+        case 'qwen':
+          text = await extractTextWithQwen(image)
           break
         case 'tencent':
           const base64Data = image.split(',')[1]
@@ -645,6 +648,7 @@ export default function Home() {
                       <SelectItem value="tencent">腾讯云</SelectItem>
                       <SelectItem value="gemini">Gemini</SelectItem>
                       <SelectItem value="zhipu">智谱GLM4</SelectItem>
+                      <SelectItem value="qwen">通义千问</SelectItem>
                     </SelectContent>
                   </Select>
 
