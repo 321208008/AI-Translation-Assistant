@@ -97,5 +97,19 @@
   "videoServices": {
     "zhipu": "智谱GLM4",
     "qwen-max": "通义千问XL-Max"
+  },
+  "ocrServices": {
+    "tencent": "腾讯云",
+    "gemini": "Gemini",
+    "zhipu": "智谱GLM4",
+    "qwen": "通义千问"
+  },
+  "translationServices": {
+    "deepseek": "DeepSeek",
+    "qwen": "通义千问",
+    "gemini": "Gemini",
+    "zhipu": "智谱GLM4",
+    "hunyuan": "腾讯混元",
+    "4o-mini": "OpenAI"
   }
 } 

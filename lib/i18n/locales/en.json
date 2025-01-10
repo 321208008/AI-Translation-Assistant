@@ -79,5 +79,23 @@
     "tencent": "Tencent Cloud"
   },
   "enterText": "Enter text to translate",
-  "chooseFile": "Choose File"
+  "chooseFile": "Choose File",
+  "ocrServices": {
+    "tencent": "Tencent Cloud",
+    "gemini": "Gemini",
+    "zhipu": "Zhipu GLM4",
+    "qwen": "Qwen"
+  },
+  "translationServices": {
+    "deepseek": "DeepSeek",
+    "qwen": "Qwen",
+    "gemini": "Gemini",
+    "zhipu": "Zhipu GLM4",
+    "hunyuan": "Tencent Hunyuan",
+    "4o-mini": "OpenAI"
+  },
+  "videoServices": {
+    "zhipu": "Zhipu GLM4",
+    "qwen-max": "Qwen XL-Max"
+  }
 } 

@@ -548,12 +548,12 @@ export default function Home() {
                     <SelectValue placeholder={t('selectService')} />
                   </SelectTrigger>
                   <SelectContent>
-                    <SelectItem value="deepseek">DeepSeek</SelectItem>
-                    <SelectItem value="qwen">通义千问</SelectItem>
-                    <SelectItem value="gemini">Gemini</SelectItem>
-                    <SelectItem value="zhipu">智谱GLM4</SelectItem>
-                    <SelectItem value="hunyuan">腾讯混元</SelectItem>
-                    <SelectItem value="4o-mini">OpenAI</SelectItem>
+                    <SelectItem value="deepseek">{t('translationServices.deepseek')}</SelectItem>
+                    <SelectItem value="qwen">{t('translationServices.qwen')}</SelectItem>
+                    <SelectItem value="gemini">{t('translationServices.gemini')}</SelectItem>
+                    <SelectItem value="zhipu">{t('translationServices.zhipu')}</SelectItem>
+                    <SelectItem value="hunyuan">{t('translationServices.hunyuan')}</SelectItem>
+                    <SelectItem value="4o-mini">{t('translationServices.4o-mini')}</SelectItem>
                   </SelectContent>
                 </Select>
 
@@ -656,10 +656,10 @@ export default function Home() {
                       <SelectValue placeholder={t('selectOCRService')} />
                     </SelectTrigger>
                     <SelectContent>
-                      <SelectItem value="tencent">腾讯云</SelectItem>
-                      <SelectItem value="gemini">Gemini</SelectItem>
-                      <SelectItem value="zhipu">智谱GLM4</SelectItem>
-                      <SelectItem value="qwen">通义千问</SelectItem>
+                      <SelectItem value="tencent">{t('ocrServices.tencent')}</SelectItem>
+                      <SelectItem value="gemini">{t('ocrServices.gemini')}</SelectItem>
+                      <SelectItem value="zhipu">{t('ocrServices.zhipu')}</SelectItem>
+                      <SelectItem value="qwen">{t('ocrServices.qwen')}</SelectItem>
                     </SelectContent>
                   </Select>
 
@@ -706,12 +706,12 @@ export default function Home() {
                       <SelectValue placeholder={t('selectService')} />
                     </SelectTrigger>
                     <SelectContent>
-                      <SelectItem value="deepseek">DeepSeek</SelectItem>
-                      <SelectItem value="qwen">通义千问</SelectItem>
-                      <SelectItem value="gemini">Gemini</SelectItem>
-                      <SelectItem value="zhipu">智谱GLM4</SelectItem>
-                      <SelectItem value="hunyuan">腾讯混元</SelectItem>
-                      <SelectItem value="4o-mini">OpenAI</SelectItem>
+                      <SelectItem value="deepseek">{t('translationServices.deepseek')}</SelectItem>
+                      <SelectItem value="qwen">{t('translationServices.qwen')}</SelectItem>
+                      <SelectItem value="gemini">{t('translationServices.gemini')}</SelectItem>
+                      <SelectItem value="zhipu">{t('translationServices.zhipu')}</SelectItem>
+                      <SelectItem value="hunyuan">{t('translationServices.hunyuan')}</SelectItem>
+                      <SelectItem value="4o-mini">{t('translationServices.4o-mini')}</SelectItem>
                     </SelectContent>
                   </Select>
 
@@ -831,12 +831,12 @@ export default function Home() {
                     <SelectValue placeholder={t('selectService')} />
                   </SelectTrigger>
                   <SelectContent>
-                    <SelectItem value="deepseek">DeepSeek</SelectItem>
-                    <SelectItem value="qwen">通义千问</SelectItem>
-                    <SelectItem value="gemini">Gemini</SelectItem>
-                    <SelectItem value="zhipu">智谱GLM4</SelectItem>
-                    <SelectItem value="hunyuan">腾讯混元</SelectItem>
-                    <SelectItem value="4o-mini">OpenAI</SelectItem>
+                    <SelectItem value="deepseek">{t('translationServices.deepseek')}</SelectItem>
+                    <SelectItem value="qwen">{t('translationServices.qwen')}</SelectItem>
+                    <SelectItem value="gemini">{t('translationServices.gemini')}</SelectItem>
+                    <SelectItem value="zhipu">{t('translationServices.zhipu')}</SelectItem>
+                    <SelectItem value="hunyuan">{t('translationServices.hunyuan')}</SelectItem>
+                    <SelectItem value="4o-mini">{t('translationServices.4o-mini')}</SelectItem>
                   </SelectContent>
                 </Select>
 
@@ -992,12 +992,12 @@ export default function Home() {
                     <SelectValue placeholder={t('selectService')} />
                   </SelectTrigger>
                   <SelectContent>
-                    <SelectItem value="deepseek">DeepSeek</SelectItem>
-                    <SelectItem value="qwen">通义千问</SelectItem>
-                    <SelectItem value="gemini">Gemini</SelectItem>
-                    <SelectItem value="zhipu">智谱GLM4</SelectItem>
-                    <SelectItem value="hunyuan">腾讯混元</SelectItem>
-                    <SelectItem value="4o-mini">OpenAI</SelectItem>
+                    <SelectItem value="deepseek">{t('translationServices.deepseek')}</SelectItem>
+                    <SelectItem value="qwen">{t('translationServices.qwen')}</SelectItem>
+                    <SelectItem value="gemini">{t('translationServices.gemini')}</SelectItem>
+                    <SelectItem value="zhipu">{t('translationServices.zhipu')}</SelectItem>
+                    <SelectItem value="hunyuan">{t('translationServices.hunyuan')}</SelectItem>
+                    <SelectItem value="4o-mini">{t('translationServices.4o-mini')}</SelectItem>
                   </SelectContent>
                 </Select>
 
@@ -1123,12 +1123,12 @@ export default function Home() {
                     <SelectValue placeholder={t('selectService')} />
                   </SelectTrigger>
                   <SelectContent>
-                    <SelectItem value="deepseek">DeepSeek</SelectItem>
-                    <SelectItem value="qwen">通义千问</SelectItem>
-                    <SelectItem value="gemini">Gemini</SelectItem>
-                    <SelectItem value="zhipu">智谱GLM4</SelectItem>
-                    <SelectItem value="hunyuan">腾讯混元</SelectItem>
-                    <SelectItem value="4o-mini">OpenAI</SelectItem>
+                    <SelectItem value="deepseek">{t('translationServices.deepseek')}</SelectItem>
+                    <SelectItem value="qwen">{t('translationServices.qwen')}</SelectItem>
+                    <SelectItem value="gemini">{t('translationServices.gemini')}</SelectItem>
+                    <SelectItem value="zhipu">{t('translationServices.zhipu')}</SelectItem>
+                    <SelectItem value="hunyuan">{t('translationServices.hunyuan')}</SelectItem>
+                    <SelectItem value="4o-mini">{t('translationServices.4o-mini')}</SelectItem>
                   </SelectContent>
                 </Select>
 
